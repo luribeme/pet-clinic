@@ -21,7 +21,7 @@ pipeline {
             }
         }
         
-        stage('Dependency check') {
+stage('Dependency check') {
     agent any
     steps {
         sh "mvn --batch-mode dependency-check:check"
@@ -40,7 +40,7 @@ pipeline {
         }
     }
 }
-
+        
         stage('Create and Publish Docker Image'){
             agent any
             steps{
