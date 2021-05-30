@@ -86,3 +86,30 @@ pipeline {
                 input message: 'Deploy to Prod?'
             }            
         }
+
+        stage('Deploy Prod'){
+    when {
+        branch 'master'
+    }
+    agent any
+    steps {
+        sh "chmod +x deploy.sh"
+        sh "./deploy.sh prod $TAG_NAME"
+    }
+}
+
+        stage('Verify Deployment'){
+    when {
+        branch 'master'
+    }
+    agent none
+    steps {
+        script {
+            env.PRODUCTION_OK = input message: 'Does the deployment is correct?', ok: 'Continue', 
+            parameters: [booleanParam(defaultValue: true, name: 'The application is working as expected')]
+
+            env.PRODUCTION_LATEST="${env.DOCKER_REPOSITORY}:production-latest"
+            env.PRODUCTION_PREVIOUSLY="${env.DOCKER_REPOSITORY}:production-previously"
+        }
+    } 
+}
