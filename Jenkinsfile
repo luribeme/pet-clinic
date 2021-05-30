@@ -77,3 +77,12 @@ pipeline {
             }
         }
 
+        stage('Decide Deploy to Prod'){
+            when {
+                branch 'master'
+            }
+            agent none
+            steps {
+                input message: 'Deploy to Prod?'
+            }            
+        }
